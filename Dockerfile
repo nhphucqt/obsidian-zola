@@ -1,6 +1,7 @@
 FROM alpine
 RUN apk --update add git zola python3 rsync py3-pip curl g++ && \
-    ln -s /usr/bin/python3 /usr/bin/python && \
+    # ln -s /usr/bin/python3 /usr/bin/python && \
+    if [ ! -e /usr/bin/python ]; then ln -s /usr/bin/python3 /usr/bin/python; fi && \
     pip3 install python-slugify rtoml && \
     git clone https://github.com/nhphucqt/obsidian-zola && \
     mkdir /obsidian
