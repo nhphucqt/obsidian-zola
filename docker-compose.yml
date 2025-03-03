@@ -10,7 +10,7 @@ services:
       - TZ=Asia/Taipei
       - SITE_URL=""
     volumes:
-      - ./obsidian:/obsidian
+      - /home/nhphucqt/Documents/Obsidian Vault/Main:/obsidian
     ports:
       - "1111:1111"
     command: sh local-run.sh
