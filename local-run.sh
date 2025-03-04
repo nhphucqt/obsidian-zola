@@ -66,4 +66,4 @@ fi
 source env.sh && python convert.py && rm env.sh
 
 # Serve Zola site
-zola --root=build serve
+zola --root=build serve --interface 0.0.0.0 --port 8080

@@ -1,31 +1,36 @@
-FROM alpine
+FROM ubuntu:22.04
 
 # Install dependencies
-RUN apk --update add git zola python3 rsync py3-pip curl g++ && \
-    python3 -m venv /venv && \
-    . /venv/bin/activate && \
-    pip install python-slugify rtoml && \
-    # git clone https://github.com/nhphucqt/obsidian-zola && \
-    mkdir /obsidian
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    python3 \
+    python-is-python3 \
+    python3-pip \
+    rsync \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+RUN pip3 install python-slugify rtoml
 
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+RUN rustup install stable
+RUN rustup default stable
+
+
+RUN git clone https://github.com/getzola/zola.git && \
+cd zola && \
+cargo install --path . --locked && \
+zola --version && \
+cp target/release/zola ~/.cargo/bin/zola
+
+RUN mkdir /obsidian
 COPY . /obsidian-zola
 
 ENV VAULT=/obsidian
 
-# Install Rust and obsidian-export
-RUN curl -sSf https://sh.rustup.rs | sh -s -- -y && \
-    source $HOME/.cargo/env && \
-    cargo install obsidian-export
-
-ENV PATH="$HOME/.cargo/bin:$PATH"
-
-# Copy entrypoint script
-COPY entrypoint.sh /
-RUN cp $HOME/.cargo/bin/obsidian-export /obsidian-zola/bin/obsidian-export && \
-    sed -i 's|zola --root=build serve|zola --root=build serve --interface 0.0.0.0 --base-url $SITE_URL|' /obsidian-zola/local-run.sh && \
-    chmod +x /entrypoint.sh
-
 EXPOSE 1111
+
 WORKDIR /obsidian-zola
 
-ENTRYPOINT [ "/entrypoint.sh" ]
+ENTRYPOINT [ "/obsidian-zola/local-run.sh" ]

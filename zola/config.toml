@@ -4,9 +4,8 @@ title = "___SITE_TITLE___"
 build_search_index = true
 compile_sass = true
 default_language = "en"
-generate_feed = true
+generate_feeds = true
 minify_html = true
-render_emoji = true
 taxonomies = []
 
 [slugify]
@@ -19,6 +18,8 @@ include_title = true
 
 [markdown]
 highlight_code = true
+render_emoji = true
+render_html = true
 
 [extra]
 home_graph = "___HOME_GRAPH___"

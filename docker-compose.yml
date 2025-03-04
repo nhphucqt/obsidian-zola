@@ -5,12 +5,7 @@ services:
     build:
       context: .
     container_name: obsidian
-    restart: always
-    environment:
-      - TZ=Asia/Taipei
-      - SITE_URL=""
     volumes:
       - /home/nhphucqt/Documents/Obsidian Vault/Main:/obsidian
     ports:
-      - "1111:1111"
-    command: sh local-run.sh
+      - "8080:8080"
